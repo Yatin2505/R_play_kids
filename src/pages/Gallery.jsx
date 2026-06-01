@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ZoomIn, X, ChevronLeft, ChevronRight, Camera, Upload, AlertCircle } from 'lucide-react';
+
+const defaultVisitorSnaps = [
+  {
+    id: 'v_0',
+    src: '/assets/images/science_fair.png',
+    category: 'Visitor Snaps',
+    title: 'Happy Campus Visit',
+    desc: 'Uploaded by Parent Rahul: Had a wonderful time watching the tiny tots play during our weekend visit!'
+  }
+];
 
 function Gallery() {
-  const categories = ['All', 'Play Zone', 'Art & Craft', 'Events', 'Classrooms'];
+  const categories = ['All', 'Play Zone', 'Art & Craft', 'Events', 'Classrooms', 'Visitor Snaps'];
 
-  const images = [
+  const baseImages = [
     {
       id: 0,
       src: '/assets/images/hero_school.png',
@@ -49,13 +59,41 @@ function Gallery() {
     }
   ];
 
+  const [visitorImages, setVisitorImages] = useState([]);
   const [filter, setFilter] = useState('All');
   const [lightboxActive, setLightboxActive] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Upload Form State
+  const [showUploadForm, setShowUploadForm] = useState(false);
+  const [visitorName, setVisitorName] = useState('');
+  const [uploadTitle, setUploadTitle] = useState('');
+  const [visitorMessage, setVisitorMessage] = useState('');
+  const [uploadFile, setUploadFile] = useState(null);
+  const [fileError, setFileError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('visitor_snaps');
+    if (saved) {
+      try {
+        setVisitorImages(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse visitor snaps", e);
+        setVisitorImages(defaultVisitorSnaps);
+      }
+    } else {
+      localStorage.setItem('visitor_snaps', JSON.stringify(defaultVisitorSnaps));
+      setVisitorImages(defaultVisitorSnaps);
+    }
+  }, []);
+
+  const allImages = [...baseImages, ...visitorImages];
+
   const filteredImages = filter === 'All' 
-    ? images 
-    : images.filter(img => img.category === filter);
+    ? allImages 
+    : allImages.filter(img => img.category === filter);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -67,13 +105,14 @@ function Gallery() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxActive, activeIndex]);
+  }, [lightboxActive, activeIndex, allImages.length]);
 
   const openLightbox = (id) => {
-    // Find the index in the original images array
-    const originalIndex = images.findIndex(img => img.id === id);
-    setActiveIndex(originalIndex);
-    setLightboxActive(true);
+    const idx = allImages.findIndex(img => img.id === id);
+    if (idx !== -1) {
+      setActiveIndex(idx);
+      setLightboxActive(true);
+    }
   };
 
   const closeLightbox = () => {
@@ -81,11 +120,71 @@ function Gallery() {
   };
 
   const nextImage = () => {
-    setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = () => {
-    setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  // Handle File Selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check size limit: 2MB
+    if (file.size > 2 * 1024 * 1024) {
+      setFileError("Image must be smaller than 2MB. Please choose a smaller picture.");
+      setUploadFile(null);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setUploadFile(reader.result);
+      setFileError('');
+    };
+    reader.onerror = () => {
+      setFileError("Failed to read file. Please try another image.");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle Snap Submission
+  const handleUploadSubmit = (e) => {
+    e.preventDefault();
+    if (!uploadTitle.trim() || !visitorName.trim() || !uploadFile) {
+      setFileError("Please fill out all required fields and select an image.");
+      return;
+    }
+
+    const newSnap = {
+      id: `v_${Date.now()}`,
+      src: uploadFile,
+      category: 'Visitor Snaps',
+      title: uploadTitle,
+      desc: `Uploaded by Visitor ${visitorName}: ${visitorMessage.trim() || 'Had a lovely visit to R PLAY KIDS!'}`
+    };
+
+    const updatedSnaps = [newSnap, ...visitorImages];
+    setVisitorImages(updatedSnaps);
+    localStorage.setItem('visitor_snaps', JSON.stringify(updatedSnaps));
+
+    // Clear form fields
+    setVisitorName('');
+    setUploadTitle('');
+    setVisitorMessage('');
+    setUploadFile(null);
+    setUploadSuccess(true);
+    setFileError('');
+
+    // Automatically navigate to show the uploaded snaps
+    setFilter('Visitor Snaps');
+
+    setTimeout(() => {
+      setUploadSuccess(false);
+      setShowUploadForm(false);
+    }, 2500);
   };
 
   return (
@@ -93,12 +192,129 @@ function Gallery() {
       {/* Filter Tabs & Grid */}
       <section className="section-padding" style={{ backgroundColor: '#ffffff' }}>
         <div className="container">
-          <div className="text-center reveal" style={{ marginBottom: '4rem' }}>
+          <div className="text-center reveal" style={{ marginBottom: '3rem' }}>
             <h1 className="section-title">School Gallery</h1>
             <p className="section-subtitle">
               Browse through our campus pictures, art creations, and school event celebrations.
             </p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <button 
+                className="btn btn-primary"
+                onClick={() => setShowUploadForm(!showUploadForm)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', boxShadow: 'var(--shadow-md)' }}
+              >
+                <Camera size={18} />
+                {showUploadForm ? "Hide Upload Form" : "Upload Your Snaps"}
+              </button>
+            </div>
           </div>
+
+          {/* Upload Form Panel */}
+          {showUploadForm && (
+            <div className="upload-panel reveal" style={{ marginBottom: '4rem' }}>
+              <form onSubmit={handleUploadSubmit} className="upload-form">
+                <h3>Share Your Play School Memories</h3>
+                <p className="upload-description">Upload snaps you captured at our playhouse or events to share with the community.</p>
+                
+                {uploadSuccess && (
+                  <div className="upload-alert alert-success">
+                    🎉 Snap uploaded successfully! Viewing "Visitor Snaps" category.
+                  </div>
+                )}
+                
+                {fileError && (
+                  <div className="upload-alert alert-danger">
+                    <AlertCircle size={18} />
+                    <span>{fileError}</span>
+                  </div>
+                )}
+
+                <div className="upload-fields">
+                  <div className="form-row">
+                    <div className="input-field">
+                      <label htmlFor="visitorName">Your Name *</label>
+                      <input
+                        type="text"
+                        id="visitorName"
+                        value={visitorName}
+                        onChange={(e) => setVisitorName(e.target.value)}
+                        placeholder="e.g. Rahul Sharma"
+                        required
+                      />
+                    </div>
+                    <div className="input-field">
+                      <label htmlFor="uploadTitle">Snap Title *</label>
+                      <input
+                        type="text"
+                        id="uploadTitle"
+                        value={uploadTitle}
+                        onChange={(e) => setUploadTitle(e.target.value)}
+                        placeholder="e.g. Sand playground fun"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="input-field">
+                    <label htmlFor="visitorMessage">Short Description / Memory</label>
+                    <textarea
+                      id="visitorMessage"
+                      value={visitorMessage}
+                      onChange={(e) => setVisitorMessage(e.target.value)}
+                      placeholder="e.g. Kids had an absolute blast at the obstacle zone today..."
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="input-field">
+                    <label>Choose Image File * <span style={{ fontWeight: 'normal', color: 'var(--text-muted)', fontSize: '0.8rem' }}>(Max 2MB)</span></label>
+                    <div className="file-dropzone-wrapper">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        id="snapFileInput"
+                        style={{ display: 'none' }}
+                        required={!uploadFile}
+                      />
+                      <label htmlFor="snapFileInput" className="file-dropzone-label">
+                        {uploadFile ? (
+                          <div className="file-preview-box">
+                            <img src={uploadFile} alt="Preview" className="image-file-preview" />
+                            <div className="file-change-overlay">
+                              <Upload size={20} />
+                              <span>Change Photo</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="file-upload-prompt">
+                            <Upload size={32} className="upload-prompt-icon" />
+                            <p>Click here to browse and select a photo</p>
+                          </div>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="upload-form-buttons">
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={() => {
+                      setShowUploadForm(false);
+                      setFileError('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Post My Snap
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           {/* Categories Tab Selector */}
           <div className="gallery-tabs reveal">
@@ -115,26 +331,33 @@ function Gallery() {
 
           {/* Photo Grid */}
           <div className="grid gallery-grid">
-            {filteredImages.map((img) => (
-              <div
-                key={img.id}
-                className="gallery-item reveal"
-                onClick={() => openLightbox(img.id)}
-              >
-                <img src={img.src} alt={img.title} />
-                <div className="gallery-overlay">
-                  <ZoomIn className="gallery-overlay-icon" />
-                  <h4>{img.title}</h4>
-                  <p>{img.category}</p>
+            {filteredImages.length > 0 ? (
+              filteredImages.map((img) => (
+                <div
+                  key={img.id}
+                  className="gallery-item reveal"
+                  onClick={() => openLightbox(img.id)}
+                >
+                  <img src={img.src} alt={img.title} />
+                  <div className="gallery-overlay">
+                    <ZoomIn className="gallery-overlay-icon" />
+                    <h4>{img.title}</h4>
+                    <p>{img.category}</p>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div style={{ gridColumn: 'span 3', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                <p style={{ fontSize: '1.1rem', fontWeight: 600 }}>No snaps found in this category.</p>
+                <p style={{ fontSize: '0.9rem', marginTop: '0.25rem' }}>Be the first visitor to upload a snap!</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
 
       {/* Fullscreen Lightbox Modal */}
-      {lightboxActive && (
+      {lightboxActive && allImages[activeIndex] && (
         <div className="lightbox-overlay" onClick={closeLightbox}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <button className="lightbox-close-btn" onClick={closeLightbox} aria-label="Close Gallery Lightbox">
@@ -146,8 +369,8 @@ function Gallery() {
             </button>
 
             <img
-              src={images[activeIndex].src}
-              alt={images[activeIndex].title}
+              src={allImages[activeIndex].src}
+              alt={allImages[activeIndex].title}
               className="lightbox-img"
             />
 
@@ -156,8 +379,8 @@ function Gallery() {
             </button>
 
             <div className="lightbox-caption">
-              <h3>{images[activeIndex].title}</h3>
-              <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.25rem' }}>{images[activeIndex].desc}</p>
+              <h3>{allImages[activeIndex].title}</h3>
+              <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.25rem' }}>{allImages[activeIndex].desc}</p>
             </div>
           </div>
         </div>

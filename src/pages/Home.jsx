@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, BookOpen, Trophy, Star, Calendar, ArrowRight, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 function Home() {
@@ -69,6 +69,13 @@ function Home() {
 
   const [activeSlide, setActiveSlide] = useState(0);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
+
   const nextSlide = () => {
     setActiveSlide((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
   };
@@ -82,6 +89,8 @@ function Home() {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-overlay"></div>
+        <div className="hero-blob blob-1"></div>
+        <div className="hero-blob blob-2"></div>
         <img
           src="/assets/images/hero_school.png"
           alt="R PLAY KIDS Campus Building"
@@ -156,7 +165,7 @@ function Home() {
             {newsItems.map((item, idx) => (
               <div key={idx} className="news-card reveal">
                 <div className="news-img-box">
-                  <span className="news-category">{item.category}</span>
+                  <span className="news-category" data-category={item.category}>{item.category}</span>
                   <img src={item.img} alt={item.title} />
                 </div>
                 <div className="news-content">
@@ -171,6 +180,43 @@ function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="section-padding testimonials-section">
+        <div className="container">
+          <div className="text-center reveal">
+            <h2 className="section-title">What Our Parents Say</h2>
+            <p className="section-subtitle">
+              Read feedback from families who have experienced the warmth and quality care of R PLAY KIDS.
+            </p>
+          </div>
+
+          <div className="testimonials-wrapper reveal" style={{ minHeight: '260px' }}>
+            {testimonials.map((item, idx) => (
+              <div
+                key={idx}
+                className={`testimonial-slide ${idx === activeSlide ? 'active' : ''}`}
+              >
+                <Quote className="quote-icon" />
+                <p className="testimonial-text">"{item.quote}"</p>
+                <div className="testimonial-author">
+                  <h4>{item.author}</h4>
+                  <p>{item.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="slider-controls reveal">
+            <button className="slider-btn" onClick={prevSlide} aria-label="Previous Testimonial">
+              <ChevronLeft size={20} />
+            </button>
+            <button className="slider-btn" onClick={nextSlide} aria-label="Next Testimonial">
+              <ChevronRight size={20} />
+            </button>
           </div>
         </div>
       </section>
