@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#/', '').replace('#', '');
-      if (['about', 'academics', 'admissions', 'gallery', 'contact'].includes(hash)) {
+      if (['about', 'academics', 'admissions', 'admissions-form', 'gallery', 'contact'].includes(hash)) {
         setCurrentPage(hash);
       } else {
         setCurrentPage('home');
@@ -62,6 +62,8 @@ function App() {
         return <Academics />;
       case 'admissions':
         return <Admissions />;
+      case 'admissions-form':
+        return <Admissions scrollToForm={true} />;
       case 'gallery':
         return <Gallery />;
       case 'contact':

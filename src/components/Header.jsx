@@ -60,7 +60,7 @@ function Header({ currentPage }) {
                 {link.name}
               </a>
             ))}
-            <a href="#/admissions" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}>
+            <a href="#/admissions-form" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}>
               Apply Now
             </a>
           </nav>
@@ -91,7 +91,7 @@ function Header({ currentPage }) {
           ))}
         </nav>
         <a
-          href="#/admissions"
+          href="#/admissions-form"
           className="btn btn-primary"
           style={{ width: '100%', textAlign: 'center' }}
           onClick={handleLinkClick}

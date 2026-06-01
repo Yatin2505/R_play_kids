@@ -106,7 +106,7 @@ function Home() {
               Welcome to R PLAY KIDS, where we blend learning with play in a warm, secure, and sunlit environment. We support toddlers and primary students as they explore, discover, and grow at their own unique pace.
             </p>
             <div className="hero-actions">
-              <a href="#/admissions" className="btn btn-primary">
+              <a href="#/admissions-form" className="btn btn-primary">
                 Apply Online Now <ArrowRight size={18} />
               </a>
               <a href="#/contact" className="btn btn-white">

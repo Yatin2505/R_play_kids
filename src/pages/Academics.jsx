@@ -31,7 +31,7 @@ function Academics() {
 
   const faculty = [
     {
-      name: 'Mrs. Sarah D\'Souza',
+      name: 'Mrs. Shalini Sen',
       designation: 'Vice Principal & Head of Montessori Care',
       qual: 'M.A., M.Ed., Early Childhood Specialist',
       exp: '18 Years Experience'
@@ -49,13 +49,13 @@ function Academics() {
       exp: '11 Years Experience'
     },
     {
-      name: 'Mr. David Miller',
+      name: 'Mr. Amit Sharma',
       designation: 'Art, Craft & Sensory Play Mentor',
       qual: 'B.Fine Arts, Certified Play Instructor',
       exp: '9 Years Experience'
     },
     {
-      name: 'Mrs. Evelyn Carter',
+      name: 'Mrs. Kavita Mehta',
       designation: 'Storytelling & Language Guide',
       qual: 'B.Ed. in English & Child Communication',
       exp: '8 Years Experience'

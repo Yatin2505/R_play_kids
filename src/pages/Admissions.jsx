@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldCheck, User, Users, MapPin, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 
-function Admissions() {
+function Admissions({ scrollToForm }) {
   const steps = [
     { num: '01', title: 'Online Registration', desc: 'Fill out and submit the online application form.' },
     { num: '02', title: 'Interactive Meet', desc: 'A friendly student interview & interactive mapping session.' },
@@ -18,6 +18,18 @@ function Admissions() {
 
   // Multi-step form state
   const [formStep, setFormStep] = useState(1);
+
+  useEffect(() => {
+    if (scrollToForm) {
+      const formElement = document.getElementById('apply-form');
+      if (formElement) {
+        // Timeout to ensure DOM is fully rendered before scrolling
+        setTimeout(() => {
+          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
+    }
+  }, [scrollToForm]);
   const [formData, setFormData] = useState({
     studentName: '',
     dob: '',
@@ -180,7 +192,7 @@ function Admissions() {
       </section>
 
       {/* Interactive Form */}
-      <section className="section-padding" style={{ backgroundColor: '#ffffff' }}>
+      <section id="apply-form" className="section-padding" style={{ backgroundColor: '#ffffff' }}>
         <div className="container">
           <div className="text-center reveal">
             <h2 className="section-title">Online Registration Form</h2>

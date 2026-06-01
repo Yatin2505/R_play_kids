@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Eye, Check, Calendar, Award, Star, TrendingUp } from 'lucide-react';
+import { Compass, Eye, Check, Calendar, Award, Star, TrendingUp, GraduationCap } from 'lucide-react';
 
 function About() {
   const stats = [
@@ -7,6 +7,45 @@ function About() {
     { number: '100%', label: 'Safety & Hygiene Standard' },
     { number: '12+', label: 'Daily Creative Activities' },
     { number: '1,500+', label: 'Happy Families' }
+  ];
+
+  const faculty = [
+    {
+      name: 'Mrs. Shalini Sen',
+      designation: 'Vice Principal & Head of Montessori Care',
+      qual: 'M.A., M.Ed., Early Childhood Specialist',
+      exp: '18 Years Experience'
+    },
+    {
+      name: 'Mrs. Priya Gopalan',
+      designation: 'Senior Kindergarten Coordinator',
+      qual: 'M.Sc. in Child Psychology, B.Ed.',
+      exp: '12 Years Experience'
+    },
+    {
+      name: 'Ms. Sunita Rao',
+      designation: 'Lead Nursery Instructor',
+      qual: 'Diploma in Montessori Pedagogy',
+      exp: '11 Years Experience'
+    },
+    {
+      name: 'Mr. Amit Sharma',
+      designation: 'Art, Craft & Sensory Play Mentor',
+      qual: 'B.Fine Arts, Certified Play Instructor',
+      exp: '9 Years Experience'
+    },
+    {
+      name: 'Mrs. Kavita Mehta',
+      designation: 'Storytelling & Language Guide',
+      qual: 'B.Ed. in English & Child Communication',
+      exp: '8 Years Experience'
+    },
+    {
+      name: 'Mr. Rajesh Kumar',
+      designation: 'Play & Physical Development Coach',
+      qual: 'B.P.Ed., Child Fitness Trainer',
+      exp: '15 Years Experience'
+    }
   ];
 
   const timelineEvents = [
@@ -50,12 +89,12 @@ function About() {
             <div className="message-image reveal">
               <img
                 src="/assets/images/principal.png"
-                alt="Principal Dr. Evelyn Henderson"
+                alt="Principal Dr. Sunita Deshmukh"
               />
             </div>
             <div className="message-content reveal">
               <h2>Principal's Message</h2>
-              <span className="principal-title">Dr. Evelyn Henderson (Ph.D. in Early Childhood Education, Stanford University)</span>
+              <span className="principal-title">Dr. Sunita Deshmukh (Ph.D. in Early Childhood Education, Stanford University)</span>
               <p>
                 Dear Parents and Families,
               </p>
@@ -69,7 +108,7 @@ function About() {
                 I invite you to visit our play campus, meet our caring educators, and join us in raising happy, lifelong explorers.
               </p>
               <div className="principal-signature">
-                <h4>Dr. Evelyn Henderson</h4>
+                <h4>Dr. Sunita Deshmukh</h4>
                 <p>Principal, R PLAY KIDS</p>
               </div>
             </div>
@@ -133,6 +172,36 @@ function About() {
                   <div className="timeline-year">{event.year}</div>
                   <h3>{event.title}</h3>
                   <p>{event.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Faculty Profiles Section */}
+      <section className="section-padding" style={{ backgroundColor: '#ffffff', borderTop: '1px solid var(--border-color)' }}>
+        <div className="container">
+          <div className="text-center reveal">
+            <h2 className="section-title">Our Dedicated Educators</h2>
+            <p className="section-subtitle">
+              Meet the Indian teachers and leaders who support our students' early academic growth.
+            </p>
+          </div>
+
+          <div className="grid grid-3">
+            {faculty.map((teacher, idx) => (
+              <div key={idx} className="faculty-card reveal">
+                <div className="faculty-img-box">
+                  <div className="faculty-img-placeholder">
+                    <GraduationCap size={40} style={{ opacity: 0.7 }} />
+                  </div>
+                </div>
+                <div className="faculty-info">
+                  <h3>{teacher.name}</h3>
+                  <div className="faculty-designation">{teacher.designation}</div>
+                  <p className="faculty-exp" style={{ fontWeight: 600, color: '#475569', marginBottom: '0.25rem' }}>{teacher.qual}</p>
+                  <p className="faculty-exp">{teacher.exp}</p>
                 </div>
               </div>
             ))}
