@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, User, Users, MapPin, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, User, Users, MapPin, Phone, Mail, Award, CheckCircle, ArrowRight, ArrowLeft, FileText, ClipboardCheck } from 'lucide-react';
 
 function Admissions({ scrollToForm }) {
   const steps = [
-    { num: '01', title: 'Online Registration', desc: 'Fill out and submit the online application form.' },
-    { num: '02', title: 'Interactive Meet', desc: 'A friendly student interview & interactive mapping session.' },
-    { num: '03', title: 'Document Verification', desc: 'Submit birth certificate, past reports, and photos.' },
-    { num: '04', title: 'Confirm Admission', desc: 'Secure the seat by paying the initial term fee.' }
+    { num: '01', title: 'Online Registration', desc: 'Fill out and submit the online application form.', icon: <FileText size={24} /> },
+    { num: '02', title: 'Interactive Meet', desc: 'A friendly student interview & interactive mapping session.', icon: <Users size={24} /> },
+    { num: '03', title: 'Document Verification', desc: 'Submit birth certificate, past reports, and photos.', icon: <ClipboardCheck size={24} /> },
+    { num: '04', title: 'Confirm Admission', desc: 'Secure the seat by paying the initial term fee.', icon: <Award size={24} /> }
   ];
 
   const criteria = [
@@ -144,12 +144,14 @@ function Admissions({ scrollToForm }) {
             </p>
           </div>
 
-          <div className="process-timeline reveal">
+          <div className="process-timeline-premium reveal">
             {steps.map((s, idx) => (
-              <div key={idx} className="process-step">
-                <div className="process-num">{s.num}</div>
-                <div className="process-step-content">
-                  <h4>{s.title}</h4>
+              <div key={idx} className="process-step-premium reveal">
+                <div className="process-icon-box-premium">
+                  {s.icon}
+                </div>
+                <div className="process-step-content-premium">
+                  <h4>{s.num}. {s.title}</h4>
                   <p>{s.desc}</p>
                 </div>
               </div>

@@ -358,7 +358,7 @@ function Gallery() {
 
       {/* Fullscreen Lightbox Modal */}
       {lightboxActive && allImages[activeIndex] && (
-        <div className="lightbox-overlay" onClick={closeLightbox}>
+        <div className="lightbox-overlay-glass" onClick={closeLightbox}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <button className="lightbox-close-btn" onClick={closeLightbox} aria-label="Close Gallery Lightbox">
               <X size={32} />

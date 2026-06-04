@@ -7,6 +7,18 @@ function Footer() {
   return (
     <footer className="site-footer">
       <div className="container">
+        {/* Newsletter Banner */}
+        <div className="footer-newsletter-banner" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '2.5rem', marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+          <div style={{ maxWidth: '450px' }}>
+            <h3 style={{ color: '#fff', fontSize: '1.4rem', marginBottom: '0.25rem' }}>Join Our Community</h3>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>Subscribe to get preschool newsletters, admissions circulars, and event announcements.</p>
+          </div>
+          <form className="newsletter-form" onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing to R PLAY KIDS updates!'); e.target.reset(); }} style={{ display: 'flex', gap: '0.5rem', flexGrow: 1, maxWidth: '400px' }}>
+            <input type="email" placeholder="Your Email Address" required className="newsletter-input" style={{ flexGrow: 1, padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
+            <button type="submit" className="newsletter-btn" style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-sm)', border: 'none', backgroundColor: 'var(--secondary-blue)', color: '#fff', fontWeight: '700', cursor: 'pointer' }}>Subscribe</button>
+          </form>
+        </div>
+
         <div className="grid footer-grid">
           {/* Column 1: School Info */}
           <div className="footer-col footer-about">
