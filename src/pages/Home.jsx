@@ -167,11 +167,11 @@ function Home() {
         <div className="hero-blob blob-2"></div>
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <div className="hero-grid">
-            <div className="hero-text-side reveal">
+            <div className="hero-text-side reveal" style={{ maxWidth: '650px' }}>
               <span className="pulse-badge">
                 <span className="pulse-dot"></span> Admissions Open 2026 - 2027
               </span>
-              <h1>Where Little Dreams <br /><span className="text-gradient">Take Flight</span></h1>
+              <h1>Where Little <span style={{ color: 'var(--secondary-blue)' }}>Dreams</span> <br /> Take <span style={{ color: 'var(--accent-gold)' }}>Flight</span></h1>
               <p>
                 Welcome to R PLAY KIDS, where we blend learning with play in a warm, secure, and sunlit environment. We support toddlers and primary students as they explore, discover, and grow at their own unique pace.
               </p>
@@ -187,31 +187,6 @@ function Home() {
                 <div className="trust-item-mini">✓ CBSE Curriculum</div>
                 <div className="trust-item-mini">✓ Montessori Labs</div>
                 <div className="trust-item-mini">✓ 100% Safe Campus</div>
-              </div>
-            </div>
-            <div className="hero-img-side reveal">
-              <div className="hero-img-container">
-                <img
-                  src="/assets/images/hero_school.png"
-                  alt="R PLAY KIDS Campus Building"
-                  className="hero-main-img"
-                />
-                <div className="floating-badge badge-1">
-                  <span className="badge-icon">🌟</span>
-                  <div>
-                    <strong>Admissions</strong>
-                    <span style={{ display: 'block', fontSize: '0.75rem', opacity: 0.8 }}>Open for 2026-27</span>
-                  </div>
-                </div>
-                <div className="floating-badge badge-2">
-                  <span className="badge-icon">🧸</span>
-                  <div>
-                    <strong>Active Play</strong>
-                    <span style={{ display: 'block', fontSize: '0.75rem', opacity: 0.8 }}>Sensory Activities</span>
-                  </div>
-                </div>
-                <div className="floating-bubble bubble-1"></div>
-                <div className="floating-bubble bubble-2"></div>
               </div>
             </div>
           </div>
